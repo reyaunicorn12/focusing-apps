@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎯 Focus App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="card">
+    <h1>🎯 Focus!</h1>
+    <p class="subtitle">Stay on task. One session at a time.</p>
+
+    <span class="mode-badge" id="mode-badge">⏱ Ready</span>
+
+    <!-- Circular progress ring -->
+    <div class="timer-ring-wrap">
+      <svg width="220" height="220" viewBox="0 0 220 220" aria-hidden="true">
+        <circle
+          class="ring-bg"
+          cx="110" cy="110" r="90"
+          stroke-width="14"
+          fill="none"
+        />
+        <circle
+          id="ring-progress"
+          cx="110" cy="110" r="90"
+          stroke-width="14"
+          fill="none"
+        />
+      </svg>
+      <span class="timer-display" id="timer-display">25:00</span>
+    </div>
+
+    <!-- Completed session dots -->
+    <p class="sessions-label">Sessions completed</p>
+    <div class="session-dots" aria-label="Completed sessions">
+      <span class="dot" role="img" aria-label="session 1"></span>
+      <span class="dot" role="img" aria-label="session 2"></span>
+      <span class="dot" role="img" aria-label="session 3"></span>
+      <span class="dot" role="img" aria-label="session 4"></span>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn" id="btn-start" aria-label="Start timer">▶ Start</button>
+      <button class="btn" id="btn-pause" aria-label="Pause timer" disabled>⏸ Pause</button>
+      <button class="btn" id="btn-reset" aria-label="Reset timer">↺ Reset</button>
+    </div>
+
+    <!-- Duration settings -->
+    <div class="settings">
+      <div class="setting-item">
+        <label for="focus-duration">Focus (min)</label>
+        <input
+          type="number"
+          id="focus-duration"
+          value="25"
+          min="1"
+          max="120"
+          aria-label="Focus duration in minutes"
+        />
+      </div>
+      <div class="setting-item">
+        <label for="break-duration">Break (min)</label>
+        <input
+          type="number"
+          id="break-duration"
+          value="5"
+          min="1"
+          max="60"
+          aria-label="Break duration in minutes"
+        />
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
