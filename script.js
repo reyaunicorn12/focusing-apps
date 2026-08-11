@@ -139,7 +139,7 @@ function playCompletionSound() {
     const startTime = audioContext.currentTime + index * (noteDuration + pauseDuration);
     oscillator.type = 'triangle';
     oscillator.frequency.setValueAtTime(freq, startTime);
-    gainNode.gain.setValueAtTime(0.12, startTime);
+    gainNode.gain.setValueAtTime(0.24, startTime);
     gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.1);
 
     oscillator.connect(gainNode);
