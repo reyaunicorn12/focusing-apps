@@ -129,22 +129,23 @@ function playCompletionSound() {
     audioContext.resume();
   }
 
-  const notePattern = [1046.5, 1318.5, 1567.98, 1318.5, 1046.5];
-  const noteDuration = 0.18;
+  const notePattern = [1046.5, 1046.5, 1318.5, 1046.5, 1046.5, 1318.5, 1046.5];
+  const noteDuration = 0.12;
+  const pauseDuration = 0.04;
 
   notePattern.forEach((freq, index) => {
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
-    const startTime = audioContext.currentTime + index * noteDuration;
+    const startTime = audioContext.currentTime + index * (noteDuration + pauseDuration);
     oscillator.type = 'triangle';
     oscillator.frequency.setValueAtTime(freq, startTime);
     gainNode.gain.setValueAtTime(0.12, startTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.15);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.1);
 
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
     oscillator.start(startTime);
-    oscillator.stop(startTime + 0.16);
+    oscillator.stop(startTime + 0.11);
   });
 }
 
