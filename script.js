@@ -164,7 +164,7 @@ function getValidatedCustomSeconds() {
     days: 365,
   };
 
-  if (!Number.isFinite(value) || value < 1) {
+  if (!Number.isFinite(value) || value < 0.2) {
     customValueInput.value = '25';
     customUnitSelect.value = 'minutes';
     return 1500;
