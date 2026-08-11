@@ -33,12 +33,13 @@ let intervalId = null;
 let isRunning = false;
 let selectedSession = 'Focus';
 let tasks = JSON.parse(localStorage.getItem('color-focus-tasks') || '[]');
+let audioContext = null;
 
 const themes = {
-  Focus: ['#8b5cf6', '#38bdf8'],
-  'Deep Work': ['#f59e0b', '#8b5cf6'],
-  Flow: ['#34d399', '#f472b6'],
-  Custom: ['#14b8a6', '#ec4899'],
+  Focus: ['#8b5cf6', '#f838db'],
+  'Deep Work': ['#f59e0b', '#8858f7'],
+  Flow: ['#34d399', '#ffbaea'],
+  Custom: ['#14b8a6', '#48ecaa'],
 };
 
 function formatTime(seconds) {
@@ -116,6 +117,32 @@ function saveTasks() {
   localStorage.setItem('color-focus-tasks', JSON.stringify(tasks));
 }
 
+function playCompletionSound() {
+  if (!window.AudioContext && !window.webkitAudioContext) return;
+
+  if (!audioContext) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    audioContext = new AudioContextClass();
+  }
+
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  oscillator.type = 'triangle';
+  oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+  oscillator.frequency.exponentialRampToValueAtTime(660, audioContext.currentTime + 0.25);
+  gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.45);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + 0.5);
+}
+
 function getValidatedCustomSeconds() {
   const value = Number.parseInt(customValueInput.value, 10);
   const unit = customUnitSelect.value;
@@ -169,6 +196,7 @@ function startTimer() {
       startBtn.textContent = 'Start';
       statusPill.textContent = 'Session complete';
       quoteEl.textContent = 'Nice work — a bright finish deserves a pause.';
+      playCompletionSound();
     }
   }, 1000);
 }
