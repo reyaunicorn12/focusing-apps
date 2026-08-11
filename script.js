@@ -129,18 +129,23 @@ function playCompletionSound() {
     audioContext.resume();
   }
 
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
-  oscillator.type = 'triangle';
-  oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
-  oscillator.frequency.exponentialRampToValueAtTime(660, audioContext.currentTime + 0.25);
-  gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.45);
+  const notePattern = [1046.5, 1318.5, 1567.98, 1318.5, 1046.5];
+  const noteDuration = 0.18;
 
-  oscillator.connect(gainNode);
-  gainNode.connect(audioContext.destination);
-  oscillator.start();
-  oscillator.stop(audioContext.currentTime + 0.5);
+  notePattern.forEach((freq, index) => {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    const startTime = audioContext.currentTime + index * noteDuration;
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(freq, startTime);
+    gainNode.gain.setValueAtTime(0.12, startTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.15);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.start(startTime);
+    oscillator.stop(startTime + 0.16);
+  });
 }
 
 function getValidatedCustomSeconds() {
