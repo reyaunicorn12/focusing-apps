@@ -105,7 +105,7 @@ function saveTasks() {
 
 function getValidatedCustomSeconds() {
   const minutes = Number.parseInt(customMinutesInput.value, 10);
-  if (!Number.isFinite(minutes) || minutes < 10000) {
+  if (!Number.isFinite(minutes) || minutes < 1) {
     customMinutesInput.value = '25';
     return 1500;
   }
@@ -122,7 +122,12 @@ function ensureCustomTimeIfSelected() {
 
 function startTimer() {
   if (isRunning) return;
+  const isResuming = startBtn.textContent === 'Resume';
   ensureCustomTimeIfSelected();
+  if (selectedSession === 'Custom' && !isResuming) {
+    remainingSeconds = sessionDurations.Custom;
+    renderTimer();
+  }
   isRunning = true;
   startBtn.textContent = 'Running';
   statusPill.textContent = `${selectedSession} underway`;
