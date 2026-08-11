@@ -3,7 +3,8 @@ const startBtn = document.getElementById('startBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const resetBtn = document.getElementById('resetBtn');
 const sessionButtons = document.querySelectorAll('.session');
-const customMinutesInput = document.getElementById('custom-minutes');
+const customValueInput = document.getElementById('custom-value');
+const customUnitSelect = document.getElementById('custom-unit');
 const setTimeBtn = document.getElementById('setTimeBtn');
 const statusPill = document.getElementById('status-pill');
 const taskForm = document.getElementById('task-form');
@@ -41,9 +42,21 @@ const themes = {
 };
 
 function formatTime(seconds) {
-  const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-  const secs = String(seconds % 60).padStart(2, '0');
-  return `${mins}:${secs}`;
+  const totalSeconds = Math.max(0, seconds);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const secs = totalSeconds % 60;
+
+  if (days > 0) {
+    return `${days}d ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
+
+  if (hours > 0) {
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
+
+  return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
 function renderTimer() {
@@ -104,15 +117,30 @@ function saveTasks() {
 }
 
 function getValidatedCustomSeconds() {
-  const minutes = Number.parseInt(customMinutesInput.value, 10);
-  if (!Number.isFinite(minutes) || minutes < 1) {
-    customMinutesInput.value = '25';
+  const value = Number.parseInt(customValueInput.value, 10);
+  const unit = customUnitSelect.value;
+  const multipliers = {
+    seconds: 1,
+    minutes: 60,
+    hours: 3600,
+    days: 86400,
+  };
+  const maxValues = {
+    seconds: 31536000,
+    minutes: 525600,
+    hours: 8760,
+    days: 365,
+  };
+
+  if (!Number.isFinite(value) || value < 1) {
+    customValueInput.value = '25';
+    customUnitSelect.value = 'minutes';
     return 1500;
   }
 
-  const boundedMinutes = Math.min(minutes, 180);
-  customMinutesInput.value = String(boundedMinutes);
-  return boundedMinutes * 60;
+  const boundedValue = Math.min(value, maxValues[unit]);
+  customValueInput.value = String(boundedValue);
+  return boundedValue * multipliers[unit];
 }
 
 function ensureCustomTimeIfSelected() {

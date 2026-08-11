@@ -39,9 +39,15 @@
 
           <div class="controls">
             <div class="custom-time">
-              <label for="custom-minutes">Set custom minutes</label>
+              <label for="custom-value">Set custom duration</label>
               <div class="custom-controls">
-                <input id="custom-minutes" type="number" min="1" max="180" value="25" />
+                <input id="custom-value" type="number" min="1" max="365" value="25" />
+                <select id="custom-unit">
+                  <option value="seconds">Seconds</option>
+                  <option value="minutes" selected>Minutes</option>
+                  <option value="hours">Hours</option>
+                  <option value="days">Days</option>
+                </select>
                 <button id="setTimeBtn" class="ghost" type="button">Set</button>
               </div>
             </div>
