@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Focus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="orb" id="orb"></div>
+
+      <main class="card">
+        <header class="hero">
+          <div>
+            <p class="eyebrow">Color Focus Studio</p>
+            <h1>Make your next sprint feel bright.</h1>
+          </div>
+          <div class="pill" id="status-pill">Ready to focus</div>
+        </header>
+
+        <section class="timer-panel">
+          <div class="timer-display">
+            <p class="label">Current session</p>
+            <div id="timer">25:00</div>
+            <div class="session-types" id="session-types">
+              <button class="session active" data-seconds="1500">Focus</button>
+              <button class="session" data-seconds="2700">Deep Work</button>
+              <button class="session" data-seconds="900">Flow</button>
+              <button class="session" data-seconds="1500">Custom</button>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="custom-time">
+              <label for="custom-minutes">Set custom minutes</label>
+              <div class="custom-controls">
+                <input id="custom-minutes" type="number" min="1" max="180" value="25" />
+                <button id="setTimeBtn" class="ghost" type="button">Set</button>
+              </div>
+            </div>
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn" class="secondary">Pause</button>
+            <button id="resetBtn" class="ghost">Reset</button>
+          </div>
+        </section>
+
+        <section class="board">
+          <div class="task-panel">
+            <div class="section-title-row">
+              <h2>Today’s Intentions</h2>
+              <span id="task-count">0 tasks</span>
+            </div>
+            <form id="task-form">
+              <input id="task-input" placeholder="Add a tiny goal" maxlength="50" />
+              <button type="submit">Add</button>
+            </form>
+            <ul id="task-list"></ul>
+          </div>
+
+          <div class="quote-panel">
+            <h2>Focus cue</h2>
+            <p id="quote">“Small bursts of color create steady momentum.”</p>
+            <div class="meter">
+              <div id="progress-bar"></div>
+            </div>
+            <p class="hint">Every completed task adds a little more light to your day.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
