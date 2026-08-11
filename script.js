@@ -103,8 +103,26 @@ function saveTasks() {
   localStorage.setItem('color-focus-tasks', JSON.stringify(tasks));
 }
 
+function getValidatedCustomSeconds() {
+  const minutes = Number.parseInt(customMinutesInput.value, 10);
+  if (!Number.isFinite(minutes) || minutes < 10000) {
+    customMinutesInput.value = '25';
+    return 1500;
+  }
+
+  const boundedMinutes = Math.min(minutes, 180);
+  customMinutesInput.value = String(boundedMinutes);
+  return boundedMinutes * 60;
+}
+
+function ensureCustomTimeIfSelected() {
+  if (selectedSession !== 'Custom') return;
+  sessionDurations.Custom = getValidatedCustomSeconds();
+}
+
 function startTimer() {
   if (isRunning) return;
+  ensureCustomTimeIfSelected();
   isRunning = true;
   startBtn.textContent = 'Running';
   statusPill.textContent = `${selectedSession} underway`;
@@ -140,19 +158,11 @@ function resetTimer() {
 }
 
 function applyCustomTime() {
-  const minutes = Number.parseInt(customMinutesInput.value, 10);
-  if (!Number.isFinite(minutes) || minutes < 1) {
-    customMinutesInput.value = '25';
-    return;
-  }
-
-  const seconds = Math.min(10800, minutes * 60);
+  const seconds = getValidatedCustomSeconds();
   selectedSession = 'Custom';
   sessionDurations.Custom = seconds;
-  remainingSeconds = seconds;
   sessionButtons.forEach((btn) => btn.classList.toggle('active', btn.textContent === 'Custom'));
   setTheme(selectedSession);
-  renderTimer();
   resetTimer();
 }
 
@@ -161,6 +171,7 @@ sessionButtons.forEach((button) => {
     sessionButtons.forEach((btn) => btn.classList.remove('active'));
     button.classList.add('active');
     selectedSession = button.textContent;
+    ensureCustomTimeIfSelected();
     remainingSeconds = sessionDurations[selectedSession];
     renderTimer();
     setTheme(selectedSession);
